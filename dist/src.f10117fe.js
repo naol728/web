@@ -117,7 +117,53 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"node_modules/axios/lib/helpers/bind.js":[function(require,module,exports) {
+})({"src/view/UserForm.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.UserForm = void 0;
+var UserForm = /** @class */function () {
+  function UserForm(parent, model) {
+    this.parent = parent;
+    this.model = model;
+  }
+  UserForm.prototype.eventMap = function () {
+    return {
+      "click:button": this.onButtonClick
+    };
+  };
+  UserForm.prototype.onButtonClick = function () {
+    console.log("button clicked");
+  };
+  UserForm.prototype.template = function () {
+    return "\n      <div>\n        <h1>User Form</h1>\n        <div>\n         <h2>Name: ".concat(this.model.get("name"), "</h2>\n         <h2>Age: ").concat(this.model.get("age"), "</h2>\n        </div>\n        <input />\n        <button>Submit</button>\n      </div>\n    ");
+  };
+  UserForm.prototype.bindEvents = function (fragment) {
+    var eventsMap = this.eventMap();
+    var _loop_1 = function _loop_1(eventkey) {
+      var _a = eventkey.split(":"),
+        eventName = _a[0],
+        selector = _a[1];
+      fragment.querySelectorAll(selector).forEach(function (element) {
+        element.addEventListener(eventName, eventsMap[eventkey]);
+      });
+    };
+    for (var eventkey in eventsMap) {
+      _loop_1(eventkey);
+    }
+  };
+  UserForm.prototype.render = function () {
+    var templateElement = document.createElement("template");
+    templateElement.innerHTML = this.template();
+    this.bindEvents(templateElement.content);
+    this.parent.append(templateElement.content);
+  };
+  return UserForm;
+}();
+exports.UserForm = UserForm;
+},{}],"node_modules/axios/lib/helpers/bind.js":[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6300,13 +6346,20 @@ exports.User = User;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+var UserForm_1 = require("./view/UserForm");
 var User_1 = require("./models/User");
-var collection = User_1.User.buildUserCollection();
-collection.on("change", function () {
-  console.log(collection);
+var user = User_1.User.buildUser({
+  name: "naol",
+  age: 31
 });
-collection.fetch();
-},{"./models/User":"src/models/User.ts"}],"../../Users/NAOL/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+var root = document.getElementById("root");
+if (root) {
+  var userform = new UserForm_1.UserForm(root, user);
+  userform.render();
+} else {
+  throw new Error("Root element not found");
+}
+},{"./view/UserForm":"src/view/UserForm.ts","./models/User":"src/models/User.ts"}],"../../Users/NAOL/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -6331,7 +6384,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56614" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63196" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
